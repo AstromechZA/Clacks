@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+
+import click
+
+from clacks.configuration import config
+from clacks.handlers.email import email
+from clacks.handlers.tweet import tweet
+
+@click.group()
+def cli():
+    pass
+
+if __name__ == '__main__':
+    cli.add_command(email)
+    cli.add_command(tweet)
+
+    cli()
