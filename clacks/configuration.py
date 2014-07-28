@@ -18,6 +18,10 @@ def _load_config(read_only=True):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+    if not os.path.exists(expanded):
+        t = shelve.open(expanded)
+        t.close()
+
     file_mode = 'r' if read_only else 'c'
 
     # open the shelve settings file
