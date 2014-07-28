@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 
 def read(fname):
@@ -12,9 +12,7 @@ setup(
     license='MIT',
     description='A simple CLI for sending text notifications via email or tweet.',
     long_description=read('README.md'),
-    packages=[
-        'clacks',
-    ],
+    packages=find_packages(),
     scripts=[
         'scripts/clacks_send',
         'scripts/clacks_config'
