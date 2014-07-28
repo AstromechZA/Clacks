@@ -17,7 +17,7 @@ setup(
     ],
     scripts=[
         'scripts/clacks_send',
-        'scripts/clacks_configure'
+        'scripts/clacks_config'
     ],
     install_requires=[
         'Click',
