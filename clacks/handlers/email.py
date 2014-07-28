@@ -56,9 +56,12 @@ def email(to_address, content, subject=''):
         "<hr>",
         "<p>%s</p>" % " ".join(content),
         "<hr>",
-        "<b>Hostname:</b> %s" % socket.gethostname(),
+        "<b>Hostname:</b> %s (%s)" % (
+            socket.gethostname(),
+            session.sock.getsockname()[0]
+        ),
         "<br>"
-        "<b>Time: </b> %s" % datetime.now().isoformat()
+        "<b>Time: </b> %s" % datetime.now().strftime("%d %B %Y %H:%M:%S")
     ])
 
     print "Sending Message.."
