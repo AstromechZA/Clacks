@@ -4,12 +4,12 @@ import atexit
 
 _CONFIG_FILE = '~/.config/clacks/settings'
 
-def _load_config(read_only=False):
+def _load_config(read_only=True):
     """
     Load the Clacks settings structure. This creates the directory '~/.clacks'
     if it does not exist.
     """
-    print 2
+
     # expand user squiggle
     expanded = os.path.expanduser(_CONFIG_FILE)
 

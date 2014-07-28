@@ -12,8 +12,13 @@ setup(
     license='MIT',
     description='A simple CLI for sending text notifications via email or tweet.',
     long_description=read('README.md'),
-    packages=['clacks',],
-    scripts=['scripts/send_clacks'],
+    packages=[
+        'clacks',
+    ],
+    scripts=[
+        'scripts/clacks_send',
+        'scripts/clacks_configure'
+    ],
     install_requires=[
         'Click'
     ],
