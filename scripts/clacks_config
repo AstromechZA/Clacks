@@ -4,35 +4,58 @@ import click
 
 from clacks.configuration import _load_config
 
+_VALID_KEYS = [
+    'email.smtp_server_address',
+    'email.smtp_server_port',
+    'email.username',
+    'email.password',
+    'email.from_address'
+]
+
+def _validate_key(ctx, param, value):
+    if not value in _VALID_KEYS:
+        raise click.BadParameter("key must be one of: %s" % _VALID_KEYS)
+    return value
+
 @click.group()
 def cli():
     pass
 
 @click.command()
-@click.argument('key')
+@click.argument('key', callback=_validate_key)
 def get(key):
     config = _load_config()
     print config[str(key)]
 
 @click.command()
-@click.argument('key')
+@click.argument('key', callback=_validate_key)
 @click.argument('value')
 def set(key, value):
-    config = _load_config(False)
     print "Setting '%s' to %r" % (str(key), value)
+    config = _load_config(False)
     config[str(key)] = value
     config.close()
     print "Done"
 
 @click.command()
-def get_all():
+def show():
     config = _load_config()
     for k,v in config.iteritems():
         print "'%s' = %r" % (k,v)
 
+@click.command()
+@click.confirmation_option(help='Are you sure you want to clear the Clacks settings file?')
+def clear():
+    config = _load_config(False)
+    for k in config.keys():
+        del config[k]
+    config.close()
+    print "Done"
+
 if __name__ == '__main__':
     cli.add_command(get)
-    cli.add_command(get_all)
     cli.add_command(set)
+    cli.add_command(show)
+    cli.add_command(clear)
 
     cli()
