@@ -20,7 +20,8 @@ setup(
         'scripts/clacks_configure'
     ],
     install_requires=[
-        'Click'
+        'Click',
+        'Twitter'
     ],
 )
 
