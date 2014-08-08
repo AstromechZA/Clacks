@@ -11,6 +11,8 @@ def cli():
     pass
 
 if __name__ == '__main__':
+    config.load()
+
     cli.add_command(email)
     cli.add_command(tweet)
 

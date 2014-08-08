@@ -12,7 +12,7 @@ setup(
     license='MIT',
     description='A simple CLI for sending text notifications via email or tweet.',
     long_description=read('README.md'),
-    packages=find_packages(),
+    packages=find_packages(exclude=['tests']),
     scripts=[
         'scripts/clacks_send',
         'scripts/clacks_config'
@@ -21,6 +21,8 @@ setup(
         'Click',
         'Twitter'
     ],
+    test_suite='nose.collector',
+    tests_require='nose',
 )
 
 # TODO: http://click.pocoo.org/setuptools/#setuptools-integration

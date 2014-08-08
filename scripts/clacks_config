@@ -2,7 +2,7 @@
 
 import click
 
-from clacks.configuration import _load_config
+from clacks.configuration import config
 
 _VALID_KEYS = [
     'email.smtp_server_address',
@@ -24,33 +24,41 @@ def cli():
 @click.command()
 @click.argument('key', callback=_validate_key)
 def get(key):
-    config = _load_config()
-    print config[str(key)]
+    config.load()
+    try:
+        print config.get(str(key))
+    except KeyError, e:
+        print "Error: '%s' is not set." % key
 
 @click.command()
 @click.argument('key', callback=_validate_key)
 @click.argument('value')
 def set(key, value):
-    print "Setting '%s' to %r" % (str(key), value)
-    config = _load_config(False)
-    config[str(key)] = value
-    config.close()
-    print "Done"
+    config.load()
+    print "setting '%s' to '%s'" % (str(key), str(value))
+    config.set(str(key), str(value))
+    config.save()
+    print "done."
 
 @click.command()
 def show():
-    config = _load_config()
-    for k,v in config.iteritems():
-        print "'%s' = %r" % (k,v)
+    config.load()
+    num_keys = len(config.keys())
+    print "Clacks Config (%s keys):" % num_keys
+    if num_keys == 0:
+        print "  <empty>"
+    else:
+        for k,v in config.iteritems():
+            print "  '%s' = '%s'" % (k,v)
 
 @click.command()
 @click.confirmation_option(help='Are you sure you want to clear the Clacks settings file?')
 def clear():
-    config = _load_config(False)
-    for k in config.keys():
-        del config[k]
-    config.close()
-    print "Done"
+    print "clearing Clacks Config.."
+    config.load()
+    config._config = {}
+    config.save()
+    print "cleared."
 
 if __name__ == '__main__':
     cli.add_command(get)

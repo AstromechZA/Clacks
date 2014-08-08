@@ -1,37 +1,53 @@
 import os
-import shelve
+import json
 import atexit
 
-_CONFIG_FILE = '~/.config/clacks/settings'
+class Config(object):
 
-def _load_config(read_only=True):
-    """
-    Load the Clacks settings structure. This creates the directory '~/.clacks'
-    if it does not exist.
-    """
+    _CONFIG_FILE = '~/.config/clacks/settings'
 
-    # expand user squiggle
-    expanded = os.path.expanduser(_CONFIG_FILE)
+    def __init__(self, custom_path=_CONFIG_FILE, auto_load=False):
+        self.loaded = False
+        self.file_path = os.path.expanduser(custom_path)
+        if auto_load:
+            self.load()
 
-    # ensure directory
-    directory = os.path.dirname(expanded)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    def save(self):
+        if not self.loaded:
+            raise RuntimeError("Config has not been loaded yet!")
 
-    if not os.path.exists(expanded):
-        t = shelve.open(expanded)
-        t.close()
+        content = json.dumps(self._config)
 
-    file_mode = 'r' if read_only else 'c'
+        # make sure correct directories exist
+        directory = os.path.dirname(self.file_path)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
 
-    # open the shelve settings file
-    shelf = shelve.open(expanded, flag=file_mode)
+        # save to file
+        with open(self.file_path, "w") as text_file:
+            text_file.write(content)
 
-    # because we don't keep track of the instance, lets make sure it is closed
-    # at the end.
-    atexit.register(lambda: shelf.close())
+    def load(self):
+        if self.loaded:
+            raise RuntimeError ("Config has already been loaded!")
+        if os.path.exists(self.file_path):
+            with open(self.file_path, "r") as text_file:
+                self._config = json.loads(text_file.read())
+        else:
+            self._config = {}
+        self.loaded = True
 
-    return shelf
+    def set(self, k, v):
+        self._config[k] = v
 
-config = _load_config()
+    def get(self, k):
+        return self._config[k]
+
+    def iteritems(self):
+        return self._config.iteritems()
+
+    def keys(self):
+        return self._config.keys()
+
+config = Config()
 

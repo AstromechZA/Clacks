@@ -23,10 +23,9 @@ def email(to_address, content, subject=''):
     print "Connecting.."
 
     session = smtplib.SMTP(
-        config['email.smtp_server_address'],
-        int(config['email.smtp_server_port'])
+        config.get('email.smtp_server_address'),
+        int(config.get('email.smtp_server_port'))
     )
-
 
     print "Starting TLS.."
 
@@ -37,14 +36,14 @@ def email(to_address, content, subject=''):
     print "Logging In.."
 
     session.login(
-        config['email.username'],
-        config['email.password']
+        config.get('email.username'),
+        config.get('email.password')
     )
 
     print "Building Message.."
 
     headers = "\r\n".join([
-        "from: %s" % config['email.from_address'],
+        "from: %s" % config.get('email.from_address'),
         "subject: %s" % subject,
         "to: %s" % to_address,
         "mime-version: 1.0",
@@ -67,7 +66,7 @@ def email(to_address, content, subject=''):
     print "Sending Message.."
 
     session.sendmail(
-        config['email.username'],
+        config.get('email.username'),
         to_address,
         headers + "\r\n\r\n" + body
     )
