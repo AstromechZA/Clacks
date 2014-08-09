@@ -51,11 +51,11 @@ def email(to_address, content, subject=''):
     ])
 
     # ensure it is a list of items
-    if type(content) != list:
+    if not type(content) in (list, tuple):
         content = [content]
 
     # create a paragraph for each line
-    contentlines = ["<p>%s</p>" % part for part in content]
+    contentlines = [("<p>%s</p>" % part) for part in content]
 
     body = "\r\n".join([
         "<h2>%s</h2>" % subject,
