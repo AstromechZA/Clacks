@@ -50,10 +50,17 @@ def email(to_address, content, subject=''):
         "content-type: text/html"
     ])
 
+    # ensure it is a list of items
+    if type(content) != list:
+        content = [content]
+
+    # create a paragraph for each line
+    contentlines = ["<p>%s</p>" % part for part in content]
+
     body = "\r\n".join([
         "<h2>%s</h2>" % subject,
         "<hr>",
-        "<p>%s</p>" % " ".join(content),
+        " ".join(contentlines),
         "<hr>",
         "<b>Hostname:</b> %s (%s)" % (
             socket.gethostname(),
