@@ -31,6 +31,7 @@ class Config(object):
         if self.loaded:
             raise RuntimeError ("Config has already been loaded!")
         if os.path.exists(self.file_path):
+            print "Loading Clacks config from %s" % self.file_path
             with open(self.file_path, "r") as text_file:
                 self._config = json.loads(text_file.read())
         else:

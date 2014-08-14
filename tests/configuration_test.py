@@ -63,5 +63,12 @@ class ConfigurationTest(unittest.TestCase):
         # check that contents are the same
         self.assert_(c.get('a') == 'hello')
 
+    def test_bad_key(self):
+        # create fake config
+        c = self.build_fake_config(auto_load=True)
+
+        c.get('lolwhut')
+
+
 if __name__ == "__main__":
     unittest.main()

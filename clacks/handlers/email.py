@@ -20,12 +20,11 @@ def email(to_address, content, subject=''):
     configured email profile.
     """
 
-    print "Connecting.."
+    address = "%s:%s" % (config.get('email.smtp_server_address'), config.get('email.smtp_server_port'))
 
-    session = smtplib.SMTP(
-        config.get('email.smtp_server_address'),
-        int(config.get('email.smtp_server_port'))
-    )
+    print "Connecting to '%s' .." % address
+
+    session = smtplib.SMTP(address)
 
     print "Starting TLS.."
 
@@ -33,7 +32,7 @@ def email(to_address, content, subject=''):
     session.starttls()
     session.ehlo()
 
-    print "Logging In.."
+    print "Logging In (%s).." % config.get('email.username')
 
     session.login(
         config.get('email.username'),
