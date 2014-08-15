@@ -6,7 +6,7 @@ def read(fname):
 
 setup(
     name='clacks',
-    version='0.1',
+    version='0.2',
     author='Ben Meier',
     author_email='benmeier42@gmail.com',
     license='MIT',
