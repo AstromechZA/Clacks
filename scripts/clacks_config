@@ -18,7 +18,7 @@ def _validate_key(ctx, param, value):
     return value
 
 @click.group()
-@click.option('--config_path', '-c', help="Explicit path to config file.")
+@click.option('--config_path', '-c', help='Explicit path to config file.')
 def cli(config_path):
     if config_path:
         config.rebase(config_path)

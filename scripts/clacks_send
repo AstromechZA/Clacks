@@ -7,8 +7,10 @@ from clacks.handlers.email import email
 from clacks.handlers.tweet import tweet
 
 @click.group()
-def cli():
-    pass
+@click.option('--config_path', '-c', help='Explicit path to config file.')
+def cli(config_path):
+    if config_path:
+        config.rebase(config_path)
 
 if __name__ == '__main__':
     cli.add_command(email)
