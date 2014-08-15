@@ -18,13 +18,14 @@ def _validate_key(ctx, param, value):
     return value
 
 @click.group()
-def cli():
-    pass
+@click.option('--config_path', '-c', help="Explicit path to config file.")
+def cli(config_path):
+    if config_path:
+        config.rebase(config_path)
 
 @click.command()
 @click.argument('key', callback=_validate_key)
 def get(key):
-    config.load()
     try:
         print config.get(str(key))
     except KeyError, e:
@@ -34,7 +35,6 @@ def get(key):
 @click.argument('key', callback=_validate_key)
 @click.argument('value')
 def set(key, value):
-    config.load()
     print "setting '%s' to '%s'" % (str(key), str(value))
     config.set(str(key), str(value))
     config.save()
@@ -42,7 +42,6 @@ def set(key, value):
 
 @click.command()
 def show():
-    config.load()
     num_keys = len(config.keys())
     print "Clacks Config (%s keys):" % num_keys
     if num_keys == 0:
@@ -55,7 +54,6 @@ def show():
 @click.confirmation_option(help='Are you sure you want to clear the Clacks settings file?')
 def clear():
     print "clearing Clacks Config.."
-    config.load()
     config._config = {}
     config.save()
     print "cleared."

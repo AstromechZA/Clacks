@@ -6,7 +6,7 @@ class Config(object):
 
     _CONFIG_FILE = '~/.config/clacks/settings'
 
-    def __init__(self, custom_path=_CONFIG_FILE, auto_load=False):
+    def __init__(self, custom_path=_CONFIG_FILE, auto_load=True):
         self.loaded = False
         self.file_path = os.path.expanduser(custom_path)
         if auto_load:
@@ -49,6 +49,13 @@ class Config(object):
 
     def keys(self):
         return self._config.keys()
+
+    def rebase(self, new_path):
+        self.file_path = os.path.expanduser(new_path)
+        if self.loaded:
+            self.loaded = False
+            self.load()
+
 
 config = Config()
 

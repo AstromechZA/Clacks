@@ -19,9 +19,6 @@ class ConfigurationTest(unittest.TestCase):
         # file should not exist
         self.assert_(not os.path.exists(c.file_path))
 
-        # load
-        c.load()
-
         # config should be blank
         self.assert_(c._config == {})
 
@@ -36,18 +33,18 @@ class ConfigurationTest(unittest.TestCase):
         self.assert_(os.path.exists(c.file_path))
 
     def test_save_before_load(self):
-        c = self.build_fake_config()
+        c = self.build_fake_config(auto_load=False)
         with self.assertRaises(RuntimeError):
             c.save()
 
     def test_double_load(self):
-        c = self.build_fake_config(auto_load=True)
+        c = self.build_fake_config()
         with self.assertRaises(RuntimeError):
             c.load()
 
     def test_get_and_set(self):
         # create fake config
-        c = self.build_fake_config(auto_load=True)
+        c = self.build_fake_config()
 
         # test that set and get work
         c.set('a', 'hello')
@@ -58,16 +55,16 @@ class ConfigurationTest(unittest.TestCase):
         c.save()
 
         # open new config with same file
-        c2 = configuration.Config(custom_path=c.file_path, auto_load=True)
+        c2 = configuration.Config(custom_path=c.file_path)
 
         # check that contents are the same
         self.assert_(c.get('a') == 'hello')
 
     def test_bad_key(self):
         # create fake config
-        c = self.build_fake_config(auto_load=True)
-
-        c.get('lolwhut')
+        c = self.build_fake_config()
+        with self.assertRaises(KeyError):
+            c.get('lolwhut')
 
 
 if __name__ == "__main__":
